@@ -8,18 +8,22 @@ const createAdmin = async (req, res) => {
   if ( error ) {
     res.status(400).send(error.details[0].message)
   } else {
+        let password = req.body.password;
+        let hashPassword = jwt.sign(password, 'pro'); 
         const body = req.body;
         let admin = {
           name: body.name,
           login: body.login,
-          password: body.password
+          password: hashPassword
         }
         let newAdmin = new Admin(admin);
         try {
           await newAdmin.save();
+          let token = jwt.sign({login: newAdmin.login, password: newAdmin.password}, 'pro');
           res.send({
             ok: true,
-            message: 'Admin created'
+            message: 'Admin created',
+            token: token
           })
         } catch (error) {
           console.log(error);
@@ -29,6 +33,51 @@ const createAdmin = async (req, res) => {
           })
         }
   }
+  }
+
+
+  const login = async (req, res) => {
+    var admins = await Admin.find();
+    const body = req.body;
+    admins.forEach( (admin) => {
+      let decode = jwt.verify(admin.password, 'pro');
+            if(decode) {
+                if (admin.login == body.login && decode == body.password) {
+                    let token = jwt.sign({login: admin.login, password: decode}, 'pro');
+                  res.send({
+                    token: token
+                  });
+                } else {
+                  res.send({
+                    ok: false,
+                    message: 'Admin not found'
+                  })
+                }
+            } else {
+              res.send({
+                ok: false,
+                message: 'Error in decode token'
+              })
+            }
+    })
+  }
+
+   async function verifyAdmin(token) {
+    const token = token;
+    try {
+      const admins = await Admin.find();
+      admins.forEach( (admin) => {
+       let distoken = jwt.verify(token, 'pro');
+       let pass = jwt.verify(admin.password, 'pro');
+       if ( distoken.login == admin.login && distoken.password == pass) {
+            return true;
+       } else {
+        return false;
+      }
+      })
+    } catch (error) {
+      return false;           
+    } 
   }
 
 
@@ -44,5 +93,7 @@ const createAdmin = async (req, res) => {
     
 
   module.exports = {
-      createAdmin
+      createAdmin,
+      login,
+      verifyAdmin
   }

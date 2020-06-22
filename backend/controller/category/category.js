@@ -1,5 +1,4 @@
-const Category = require('../../models/admin');
-const Admin = require('../admin/admin');
+const Category = require('../../models/category');
 const Joi = require('joi');
 const config = require('../../config/config');
 
@@ -10,33 +9,86 @@ const createCategory = async (req, res) => {
   } else {
         const body = req.body;
         const file = req.file;
-        const token = req.params.token;
-        // console.log(token);
-         const res = Admin.verifyAdmin(token); 
-         console.log(res);
-         
-        // let category = {
-        //   name: body.name,
-        //   logo: file.filename
-        // };
-        // let newCategory = new Category(category);
-        // try {
-        //   await newCategory.save();
-        //   res.send({
-        //     ok: true,
-        //     message: 'New Category created'
-        //   })
-        // } catch (error) {
-        //   console.log(error);
-        //   res.send({
-        //     ok: false,
-        //     message: 'Error in create User'
-        //   })
-        // }
+        let category = {
+          name: body.name,
+          logo: file.filename
+        };
+        let newCategory = new Category(category);
+        try {
+          await newCategory.save();
+          res.send({
+            ok: true,
+            message: 'New Category created'
+          })
+        } catch (error) {
+          console.log(error);
+          res.send({
+            ok: false,
+            message: 'Error in create User'
+          })
+        }
   }
   } 
 
+  const getCategories = async function (req, res) {
+      try {
+        let categories = await Category.find();
+        if (categories.length > 0) {
+            res.status(200).json(categories);
+        } else {
+            res.send({
+              ok: false,
+              message: 'Categories not found'
+            })
+        }
+      } catch (error) {
+          console.log(error);
+          res.send({
+            ok: false,
+            message: 'Error in get Categories'
+          })
+      }
+  }
 
+  const getOneCategory = async function (req, res) {
+    let id = req.params.id;
+    try {
+      let category = await Category.findById(id);
+      res.status(200).json(category);
+    } catch (error) {
+        console.log(error);
+         res.send({
+           ok: false,
+           message: 'Error in get One Category'
+         }) 
+    }
+  }
+
+  const deleteCategory = async function (req, res) {
+    let id = req.params.id;
+    try {
+      let  category = await Category.findById(id);
+
+      fs.unlink('backend/images/' + category.logo, function (err) {
+          if (err) {
+          console.log(err.message);}
+          else {
+              console.log('File deleted!');
+          }
+      });
+      await Category.findByIdAndDelete(id);
+      res.send({
+        ok: true,
+        message: "Category deleted"
+      })
+    } catch (error) {
+        console.log(error);
+         res.send({
+           ok: false,
+           message: 'Error in delete Category'
+         }) 
+    }
+  }
 
   function validateCategory(category) {
     const categorySchema = {
@@ -48,5 +100,8 @@ const createCategory = async (req, res) => {
     
 
   module.exports = {
-      createCategory
+      createCategory,
+      getCategories,
+      getOneCategory,
+      deleteCategory
   }

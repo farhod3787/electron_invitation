@@ -61,31 +61,7 @@ const createAdmin = async (req, res) => {
             }
     })
   }
-
-    verifyAdmin = async function(token) {
-    const token = token;
-    try {
-      const admins = await Admin.find();
-      admins.forEach( (admin) => {
-       let distoken = jwt.verify(token, 'pro');
-       let pass = jwt.verify(admin.password, 'pro');
-       if ( distoken.login == admin.login && distoken.password == pass) {
-            res.send({
-                ok: true
-                  });
-            } else {
-              res.send({
-                ok: false
-            });
-            }
-            })
-          } catch (error) {
-            res.send({
-              ok: false
-          });           
-    } 
-  }
-
+ 
 
   function validateAdmin(admin) {
     const adminSchema = {
@@ -100,6 +76,5 @@ const createAdmin = async (req, res) => {
 
   module.exports = {
       createAdmin,
-      login,
-      verifyAdmin
+      login 
   }

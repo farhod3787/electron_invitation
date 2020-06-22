@@ -13,7 +13,6 @@ app.use(cors());
 
 mongoose.connect(
     config.MONGO_URL
-    // config.CLOUD_URL
     ).then( () => {
       console.log('Connected to database')
   })

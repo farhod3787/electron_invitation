@@ -62,7 +62,7 @@ const createAdmin = async (req, res) => {
     })
   }
 
-   async function verifyAdmin(token) {
+    verifyAdmin = async function(token) {
     const token = token;
     try {
       const admins = await Admin.find();
@@ -70,13 +70,19 @@ const createAdmin = async (req, res) => {
        let distoken = jwt.verify(token, 'pro');
        let pass = jwt.verify(admin.password, 'pro');
        if ( distoken.login == admin.login && distoken.password == pass) {
-            return true;
-       } else {
-        return false;
-      }
-      })
-    } catch (error) {
-      return false;           
+            res.send({
+                ok: true
+                  });
+            } else {
+              res.send({
+                ok: false
+            });
+            }
+            })
+          } catch (error) {
+            res.send({
+              ok: false
+          });           
     } 
   }
 

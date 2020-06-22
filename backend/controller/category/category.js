@@ -12,25 +12,27 @@ const createCategory = async (req, res) => {
         const file = req.file;
         const token = req.params.token;
         // console.log(token);
-        
-        let category = {
-          name: body.name,
-          logo: file.filename
-        };
-        let newCategory = new Category(category);
-        try {
-          await newCategory.save();
-          res.send({
-            ok: true,
-            message: 'New Category created'
-          })
-        } catch (error) {
-          console.log(error);
-          res.send({
-            ok: false,
-            message: 'Error in create User'
-          })
-        }
+         const res = Admin.verifyAdmin(token); 
+         console.log(res);
+         
+        // let category = {
+        //   name: body.name,
+        //   logo: file.filename
+        // };
+        // let newCategory = new Category(category);
+        // try {
+        //   await newCategory.save();
+        //   res.send({
+        //     ok: true,
+        //     message: 'New Category created'
+        //   })
+        // } catch (error) {
+        //   console.log(error);
+        //   res.send({
+        //     ok: false,
+        //     message: 'Error in create User'
+        //   })
+        // }
   }
   } 
 

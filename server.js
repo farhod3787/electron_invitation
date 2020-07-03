@@ -1,5 +1,6 @@
 const http = require('http')
 const debug = require('debug')('node-angular')
+
 const app = require('./backend/app');
 const onError = error => {
     if (error.syscall !== "listen") {
@@ -18,7 +19,6 @@ const onError = error => {
         default:
             throw error;
     }
-
 }
 
 const onListening = () => {

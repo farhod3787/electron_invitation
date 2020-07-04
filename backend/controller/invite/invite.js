@@ -14,7 +14,8 @@ const createInvite = async (req, res) => {
           date: body.date,
           place: body.place,
           random_id: body.random_id,
-          image: file.filename
+          image: file.filename,
+          template_id: body.template_id
         };
         let newInvite = new Invite(invite);
         try {
@@ -87,7 +88,8 @@ const createInvite = async (req, res) => {
         text: Joi.string().required().min(3), 
         date: Joi.string().required().min(3), 
         place: Joi.string().required().min(3), 
-        random_id: Joi.string().required().min(3) 
+        random_id: Joi.string().required().min(3),
+        template_id: Joi.string().required().min(3)
     }
     return Joi.validate(invite, inviteSchema);
     }

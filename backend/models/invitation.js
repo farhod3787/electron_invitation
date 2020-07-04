@@ -5,7 +5,8 @@ const inviteSchema = mongoose.Schema({
   date: {type: String},
   place: {type: String},
   image: {type: String},
-  random_id: {type: String}
+  random_id: {type: String},
+  template_id: {type: String}
 });
 
 module.exports = mongoose.model('invite', inviteSchema)

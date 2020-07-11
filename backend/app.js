@@ -6,6 +6,7 @@ const config = require('./config/config');
 
 const routes = require('./routes');
 const cors = require("cors");
+const { EIDRM } = require('constants');
 const app = express();
 
 app.use(cors());
@@ -42,5 +43,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api', routes.api);
-
+app.get('/', (req, res) => {
+    res.send('Bu yerda sizning reklamangiz bo\'lishi mumkin edi.')
+})
 module.exports = app;

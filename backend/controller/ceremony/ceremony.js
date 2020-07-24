@@ -11,6 +11,8 @@ const createCeremony = async (req, res) => {
         const file = req.file;
         let ceremony = {
           name: body.name,
+          category_id: body.category_id,
+          color_id: body.color_id,
           logo: file.filename
         };
         let newCeremony = new Ceremony(ceremony);
@@ -64,6 +66,51 @@ const createCeremony = async (req, res) => {
     }
   }
 
+
+  const getFilterByCategory = async function(req, res) {
+    let id = req.params.category_id;
+    try {
+      let ceremonies = await Ceremony.find({category_id: id});
+      res.status(200).json(ceremonies);
+    } catch (error) {
+      console.log(error);
+      res.send({
+        ok: false,
+        message: "Error in getFilterByCategory function"
+      })
+    }
+  }
+
+  const getFilterByColor = async function(req, res) {
+    let id = req.params.color_id;
+    try {
+      let ceremonies = await Ceremony.find({color_id: id});
+      res.status(200).json(ceremonies);
+    } catch (error) {
+      console.log(error);
+      res.send({
+        ok: false,
+        message: "Error in getFilterByColor function"
+      })
+    }
+  }
+
+  const getFilterMixed = async function(req, res) {
+    let color_id = req.params.color_id;
+    let ceremony_id = req.params.ceremony_id;
+    try {
+      let ceremonies = await Ceremony
+      .find({ "color_id": color_id , "ceremony_id": ceremony_id });
+      res.status(200).json(ceremonies);
+    } catch (error) {
+      console.log(error);
+      res.send({
+        ok: false,
+        message: "Error in getFilterByColor function"
+      })
+    }
+  }
+
   const deleteCeremony = async function (req, res) {
     let id = req.params.id;
     try {
@@ -92,7 +139,9 @@ const createCeremony = async (req, res) => {
 
   function validateCeremony(ceremony) {
     const ceremonySchema = {
-        name: Joi.string().required().min(3) 
+        name: Joi.string().required().min(3),
+        category_id: Joi.string().required().min(5), 
+        color_id: Joi.string().required().min(5) 
     }
     return Joi.validate(ceremony, ceremonySchema);
     }
@@ -103,5 +152,8 @@ const createCeremony = async (req, res) => {
       createCeremony,
       getCeremonies,
       getOneCeremony,
+      getFilterByCategory,
+      getFilterByColor,
+      getFilterMixed,
       deleteCeremony
   }

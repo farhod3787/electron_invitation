@@ -30,6 +30,9 @@ const upload = multer({ storage: storage });
 router.post('/', upload.single('image'), Controllers.ceremony.createCeremony);
 router.get('/', Controllers.ceremony.getCeremonies);
 router.get('/:id', Controllers.ceremony.getOneCeremony);
+router.get('/bycategory/:category_id', Controllers.ceremony.getFilterByCategory);
+router.get('/bycolor/:color_id', Controllers.ceremony.getFilterByColor);
+router.get('/mixed/:color_id/:category_id', Controllers.ceremony.getFilterMixed);
 router.delete('/:id', Controllers.ceremony.deleteCeremony);
 
 module.exports = router;

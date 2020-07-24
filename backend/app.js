@@ -23,7 +23,6 @@ mongoose.connect(
 
 module.exports = { mongoose };
 
-// app.use(express.bodyParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -44,6 +43,6 @@ app.use((req, res, next) => {
 
 app.use('/api', routes.api);
 app.get('/', (req, res) => {
-    res.send('Bu yerda sizning reklamangiz bo\'lishi mumkin edi.')
+    res.send('<h2>Bu yerda sizning reklamangiz bo\'lishi mumkin edi.</h2>')
 })
 module.exports = app;

@@ -3,7 +3,9 @@ const ceremony = require('./ceremony/ceremony')
 const user = require('./user/user')
 const template = require('./template/template')
 const fields = require('./fields/fields');
-const invite = require('./invite/invite')
+const invite = require('./invite/invite');
+const color = require('./color/color');
+const category = require('./category/category');
 
 module.exports = {
     admin,
@@ -11,5 +13,7 @@ module.exports = {
     user,
     template,
     fields,
-    invite
+    invite,
+    color,
+    category
 }
